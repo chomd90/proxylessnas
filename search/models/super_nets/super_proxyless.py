@@ -124,6 +124,8 @@ class SuperProxylessNASNets(ProxylessNASNets):
                 param.data.normal_(0, init_ratio)
             elif init_type == 'uniform':
                 param.data.uniform_(-init_ratio, init_ratio)
+            elif init_type == 'prob':
+                param.data = torch.ones(param.data.size()) / len(self.candidate_ops)
             else:
                 raise NotImplementedError
 

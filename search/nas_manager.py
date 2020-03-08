@@ -4,6 +4,32 @@
 
 from run_manager import *
 
+from torch.optimizer import Optimizer
+
+class ExpGrad(Optimizer):
+    def __init__(self, params, lr=1e-3):
+        defaults = dict(lr=lr, alpha=alpha, beta=beta)
+        super(ExpGrad, self).__init__(params, defaults)
+
+    def __setstate__(self, state):
+        super(ExpGrad, self)__setstate__(state)
+
+    def step(self, closure=None):
+        loss = None
+        for group in self.param_groups:
+            for p in group['params']:
+                if p.grad is None:
+                    continue
+                grad = p.grad.data
+                state = self.state[p]
+                if len(state)==0:
+                    state['step'] = 0
+                state['step'] += 1
+                update = torch.exp(-group['lr'] * grad)
+                raw = p.data * update
+                normalized = raw / torch.sum(raw, dim=-1, keepdim=True)
+                p.data = normalized
+        return loss
 
 class ArchSearchConfig:
 
@@ -43,8 +69,11 @@ class ArchSearchConfig:
             return torch.optim.Adam(
                 params, self.lr, weight_decay=self.weight_decay, **self.opt_param
             )
+        elif self.opt_type == 'exp':
+            return ExpGrad(params, self.lr)
         else:
             raise NotImplementedError
+
 
 
 class GradientArchSearchConfig(ArchSearchConfig):

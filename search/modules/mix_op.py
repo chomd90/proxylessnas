@@ -69,7 +69,7 @@ class MixedEdge(MyModule):
 
     @property
     def probs_over_ops(self):
-        probs = F.softmax(self.AP_path_alpha, dim=0)  # softmax to probability
+        probs = self.AP_path_alpha 
         return probs
 
     @property

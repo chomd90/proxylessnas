@@ -76,7 +76,7 @@ parser.add_argument('--warmup_epochs', type=int, default=40)
 """ shared hyper-parameters """
 parser.add_argument('--arch_init_type', type=str, default='normal', choices=['normal', 'uniform'])
 parser.add_argument('--arch_init_ratio', type=float, default=1e-3)
-parser.add_argument('--arch_opt_type', type=str, default='adam', choices=['adam'])
+parser.add_argument('--arch_opt_type', type=str, default='exp', choices=['adam', 'exp'])
 parser.add_argument('--arch_lr', type=float, default=1e-3)
 parser.add_argument('--arch_adam_beta1', type=float, default=0)  # arch_opt_param
 parser.add_argument('--arch_adam_beta2', type=float, default=0.999)  # arch_opt_param
